@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+@layer base {
+  button, a, input {
+    @apply cursor-pointer;
+  }
+}
+
+body {
+  height: 100vh;
+  display: grid;
+  align-items: center;
+}
+
+@utility scrollbar-none {
+  -ms-overflow-style: none;  
+  scrollbar-width: none;     
+  
+  &::-webkit-scrollbar {
+    display: none;           
+  }
+}
+
+*:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+body.is-keyboard {
+  *:focus {
+    outline: 3px solid red;
+    outline-offset: 2px;
+    transition-duration: 0s;
+  }
+}
