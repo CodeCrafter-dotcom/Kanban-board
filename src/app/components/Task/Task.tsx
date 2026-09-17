@@ -23,7 +23,7 @@ const Task = ({ title, columnId, taskId }: TaskProps) => {
 
     return(
         <div
-        draggable
+        draggable={true}
         onDragStart={handleDragStart}
         className="cursor-grab h-10 border border-black rounded-xl 
         flex justify-between items-center pl-1.5 py-2.5 will-change-transform active:cursor-grabbing"
