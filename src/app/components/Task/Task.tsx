@@ -1,10 +1,10 @@
 'use client'
 
-import { deleteTask } from "@/app/actions"
 import { columnIdT } from "@/types"
 import Link from "next/link"
 import Button from "../ui/Button/Button"
 import { memo } from "react"
+import { useContextActions } from "@/app/Context/TaskContext"
 
 interface TaskProps {
     title: string
@@ -13,6 +13,8 @@ interface TaskProps {
 }
 
 const Task = ({ title, columnId, taskId }: TaskProps) => {
+
+    const { deleteTask } = useContextActions()
 
     const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
         e.dataTransfer.setData('text/taskId', taskId)
@@ -24,13 +26,13 @@ const Task = ({ title, columnId, taskId }: TaskProps) => {
         draggable
         onDragStart={handleDragStart}
         className="cursor-grab h-10 border border-black rounded-xl 
-        flex justify-between items-center pl-1.5 py-2.5 "
+        flex justify-between items-center pl-1.5 py-2.5 will-change-transform active:cursor-grabbing"
         >   
             <Link href={`/${columnId}/${taskId}`} className="w-52.5 truncate ">{title}</Link>
             <Button 
             type="button"
             variant="deleteTaskButton"
-            onClick={async () => await deleteTask(columnId, taskId)}
+            onClick={() => deleteTask(columnId, taskId)}
             >×</Button>
             <span 
             className="text-2xl font-bold relative after:content-[''] after:-translate-x-1/2 after:-translate-y-1/2

@@ -1,9 +1,7 @@
-'use client'
-
 import { BoardData, columnIds, columnIdT } from "@/types"
 import Column from "../Column/Column"
-import { useState, useEffect, useCallback } from "react"
-import { saveBoardData } from "@/app/actions"
+import { useCallback } from "react"
+import { useContextActions } from "@/app/Context/TaskContext"
 
 interface BoardProps {
     boardData: BoardData
@@ -15,11 +13,7 @@ const column3 = columnIds.Done
 
 export default function Board({ boardData }: BoardProps) {
 
-    const [boardDataState, setBoardDataState] = useState<BoardData>(boardData)
-
-    useEffect(() => {
-        setBoardDataState(boardData)
-    }, [boardData])
+    const { setTasks } = useContextActions()
 
     const handleDragOver = useCallback((e: React.DragEvent<HTMLDivElement>) => e.preventDefault(), [])
 
@@ -29,21 +23,20 @@ export default function Board({ boardData }: BoardProps) {
     
         if (columnId === targetColumn) return
     
-        const taskToMove = boardDataState[columnId].find(task => task.id === taskId)
+        const taskToMove = boardData[columnId].find(task => task.id === taskId)
         if (!taskToMove) return
     
-        const updatedSourceCol = boardDataState[columnId].filter(task => task.id !== taskId)
-        const updatedTargetCol = [...boardDataState[targetColumn], taskToMove]
+        const updatedSourceCol = boardData[columnId].filter(task => task.id !== taskId)
+        const updatedTargetCol = [...boardData[targetColumn], taskToMove]
     
         const updatedData = {
-          ...boardDataState,
+          ...boardData,
           [columnId]: updatedSourceCol,
           [targetColumn]: updatedTargetCol
         }
 
-        setBoardDataState(updatedData)
-        saveBoardData(updatedData)
-    }, [boardDataState])
+        setTasks(updatedData)
+    }, [boardData, setTasks])
 
     const handleDropTodo = useCallback((e: React.DragEvent<HTMLDivElement>) => handleDrop(e, column1), [handleDrop])
     const handleDropProgress = useCallback((e: React.DragEvent<HTMLDivElement>) => handleDrop(e, column2), [handleDrop])
@@ -55,19 +48,19 @@ export default function Board({ boardData }: BoardProps) {
                 onDragOver={handleDragOver} 
                 onDrop={handleDropTodo} 
                 title="In the plans" 
-                tasks={boardDataState.todo} 
+                tasks={boardData?.todo || []} 
                 columnId={column1}/>
             <Column 
                 onDragOver={handleDragOver} 
                 onDrop={handleDropProgress} 
                 title="In progress" 
-                tasks={boardDataState.progress} 
+                tasks={boardData?.progress || []} 
                 columnId={column2}/>
             <Column 
                 onDragOver={handleDragOver} 
                 onDrop={handleDropDone} 
                 title="Ready" 
-                tasks={boardDataState.done} 
+                tasks={boardData?.done || []} 
                 columnId={column3}/>
         </div>
     )

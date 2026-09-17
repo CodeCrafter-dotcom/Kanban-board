@@ -2,22 +2,23 @@
 
 import Link from "next/link"
 import { useState, use } from "react"
-import { BoardData, columnIdT } from "@/types"
 import EditTask from "@/app/components/EditTask/EditTask"
+import { useContextData } from "@/app/Context/TaskContext"
+import { columnIdT } from "@/types"
 
 interface TaskDetailsProps {
-    params: Promise<{taskDetails: string; columnId: columnIdT}>
-    data: BoardData
+    columnId: columnIdT
+    taskId: string
 }
 
-export default  function TaskBody ({ params, data }: TaskDetailsProps) {
+export default  function TaskBody ({ columnId, taskId }: TaskDetailsProps) {
 
-    const { taskDetails, columnId } = use(params)
+    const { tasks } = useContextData()
 
     const [activeDialog, setActiveDialog] = useState<boolean>(false)
 
-    const allTasks = [...(data.todo || []), ...(data.progress || []), ...(data.done || [])]
-    const currentTask = allTasks.find(task => task.id === taskDetails)
+    const allTasks = [...(tasks.todo || []), ...(tasks.progress || []), ...(tasks.done || [])]
+    const currentTask = allTasks.find(task => task.id === taskId)
 
     if (!currentTask) {
         console.log('not found')
@@ -43,7 +44,7 @@ export default  function TaskBody ({ params, data }: TaskDetailsProps) {
                   onClose={() => setActiveDialog(false)}
                   isOpen={activeDialog}
                   columnId={columnId}
-                  taskId={taskDetails}
+                  taskId={taskId}
                 />
             )}
         </div>

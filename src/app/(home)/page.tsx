@@ -1,7 +1,4 @@
-import Board from "../components/Board/Board";
-import Header from "../layout/Header/Header";
-import { getBoardData } from "../actions";
-import { BoardData } from "@/types";
+import KanbanWorkspace from "../components/KanbanWorkspace/KanbanWorkspace";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -9,14 +6,11 @@ export const metadata: Metadata = {
   description: "Ваша главная рабочая область."
 }
 
-export default async function Home() {
-
-  const data: BoardData = await getBoardData()
+export default function Home() {
 
   return (
     <div className="grid gap-5">
-      <Header boardData={data}/>
-      <Board boardData={data}/>
+      <KanbanWorkspace/>
     </div>
-  );
+  )
 }

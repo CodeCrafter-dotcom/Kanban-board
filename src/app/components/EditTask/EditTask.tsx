@@ -1,9 +1,9 @@
 'use client'
 
-import { renameTask} from "@/app/actions"
 import { columnIdT } from "@/types"
 import { useEffect, useRef, useState } from "react"
 import Button from "../ui/Button/Button"
+import { useContextActions } from "@/app/Context/TaskContext"
 
 interface AddTaskProps {
     isOpen: boolean
@@ -13,6 +13,8 @@ interface AddTaskProps {
 }
 
 export default function EditTask({ onClose, isOpen, columnId, taskId }: AddTaskProps) {
+
+    const { renameTask } = useContextActions()
 
     const dialogRef = useRef<HTMLDialogElement>(null)
     const inputRef = useRef<HTMLInputElement>(null)
@@ -51,7 +53,7 @@ export default function EditTask({ onClose, isOpen, columnId, taskId }: AddTaskP
                     </Button>
                 </div>
                 <form
-                action={async (formData) => {
+                action={(formData) => {
                 const text = formData.get("taskTextEdit") as string
                     if (!text || text.trim().length === 0) {
                         setInputError(true)
@@ -63,7 +65,7 @@ export default function EditTask({ onClose, isOpen, columnId, taskId }: AddTaskP
                     } else {
                         setInputError(false)
                         
-                        await renameTask(columnId, taskId, text)
+                        renameTask(columnId, taskId, text)
                     
                         onClose()
                     }

@@ -1,8 +1,8 @@
 'use client'
 
-import { addTask } from "@/app/actions"
 import { useRef, useEffect, useState } from "react"
 import Button from "../ui/Button/Button"
+import { useContextActions } from "@/app/Context/TaskContext"
 
 interface AddTaskProps {
     isOpen: boolean
@@ -10,6 +10,8 @@ interface AddTaskProps {
 }
 
 export default function AddTask({ onClose, isOpen }: AddTaskProps) {
+
+    const { addTask } = useContextActions()
 
     const dialogRef = useRef<HTMLDialogElement>(null)
     const inputRef = useRef<HTMLInputElement>(null)
@@ -48,7 +50,7 @@ export default function AddTask({ onClose, isOpen }: AddTaskProps) {
                 </Button>
             </div>
             <form 
-            action={async (formData) => {
+            action={(formData) => {
                 const text = formData.get("taskText") as string
                 if (!text || text.trim().length === 0) {
                     setInputError(true)
@@ -59,7 +61,7 @@ export default function AddTask({ onClose, isOpen }: AddTaskProps) {
                     }, 3000)
                 } else {
                     setInputError(false)
-                    await addTask("todo", text)
+                    addTask(text)
                 
                     onClose()
                 }

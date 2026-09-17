@@ -1,10 +1,10 @@
 'use client'
 
-import { deleteColumn } from "@/app/actions"
 import Task from "../Task/Task"
 import { columnIdT, TaskT } from "@/types"
 import Button from "../ui/Button/Button"
 import { memo } from "react"
+import { useContextActions } from "@/app/Context/TaskContext"
 
 interface ColumnProps{
     title: string
@@ -16,16 +16,18 @@ interface ColumnProps{
 
 const Column = ({ title, tasks, columnId, onDragOver, onDrop }: ColumnProps) => {
 
+    const { deleteColumnTask } = useContextActions()
+
     const handleColumnDelete = () => {
         if(columnId.length === 0) return
 
-        deleteColumn(columnId)
+        deleteColumnTask(columnId)
     }
 
     return(
         <div 
         onDragOver={onDragOver} 
-        className="grid gap-8 content-start border border-black py-5 px-8 rounded-xl w-87.5 h-125 overflow-hidden"
+        className="grid gap-8 content-start border border-black py-5 px-8 rounded-xl w-88.75 h-125 overflow-hidden"
         onDrop={onDrop}
         >
             <div className="flex justify-between gap-2.5 items-center">
@@ -37,7 +39,7 @@ const Column = ({ title, tasks, columnId, onDragOver, onDrop }: ColumnProps) => 
                 >
                 Clear column
                 </Button>
-                <span className="text-xl font-semibold">{tasks.length}</span>
+                <span className="text-xl font-semibold">{tasks ? tasks.length : 0}</span>
             </div>
             <div className="flex flex-col pb-1 gap-2.5 overflow-y-auto scrollbar-none overflow-x-hidden overscroll-contain">
                 {tasks.map((item) => (

@@ -1,16 +1,16 @@
-'use client'
-
 import { useState } from "react";
 import AddTask from "../../components/AddTask/AddTask"
-import { deleteAllTask } from "@/app/actions";
 import { BoardData } from "@/types";
 import Button from "@/app/components/ui/Button/Button";
+import { useContextActions } from "@/app/Context/TaskContext";
 
 interface BoardProps {
     boardData: BoardData
 }
 
 export default function Header({ boardData }: BoardProps) {
+
+    const { deleteAllTask } = useContextActions()
 
     const [activeDialog, setActiveDialog] = useState<boolean>(false)
 

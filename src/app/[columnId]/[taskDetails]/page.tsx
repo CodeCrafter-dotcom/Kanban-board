@@ -1,6 +1,5 @@
 import TaskBody from "./TaskBody"
-import { BoardData, columnIdT } from "@/types"
-import { getBoardData } from "../../actions"
+import { columnIdT } from "@/types"
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
@@ -17,11 +16,11 @@ interface TaskDetailsProps {
 
 export default async function Home({ params }: TaskDetailsProps) {
 
-  const data: BoardData = await getBoardData()
+  const resolvedParams = await params
 
   return (
     <>
-    <TaskBody params={params} data={data}/>
+    <TaskBody columnId={resolvedParams.columnId} taskId={resolvedParams.taskDetails} />
     </>
   )
 }
