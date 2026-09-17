@@ -1,7 +1,7 @@
 'use client'
 
 import Link from "next/link"
-import { useState, use } from "react"
+import { useState } from "react"
 import EditTask from "@/app/components/EditTask/EditTask"
 import { useContextData } from "@/app/Context/TaskContext"
 import { columnIdT } from "@/types"
@@ -21,8 +21,12 @@ export default  function TaskBody ({ columnId, taskId }: TaskDetailsProps) {
     const currentTask = allTasks.find(task => task.id === taskId)
 
     if (!currentTask) {
-        console.log('not found')
-        return
+        return (
+            <div className="p-6 text-center">
+                <p className="text-gray-500 mb-4">Задача загружается или не найдена...</p>
+                <Link href="/" className="text-blue-500 underline">Вернуться на главную</Link>
+            </div>
+        )
     }
 
     return (
