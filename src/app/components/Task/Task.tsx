@@ -14,17 +14,23 @@ interface TaskProps {
 
 const Task = ({ title, columnId, taskId }: TaskProps) => {
 
-    const { deleteTask } = useContextActions()
+    const { deleteTask, setActiveTaskId, setSourceColumnId } = useContextActions()
 
-    const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
-        e.dataTransfer.setData('text/taskId', taskId)
-        e.dataTransfer.setData('text/columnId', columnId)
+    const handleDragStart = () => {
+        setActiveTaskId(taskId)
+        setSourceColumnId(columnId)
+    }
+
+    const handleDragEnd = () => {
+        setActiveTaskId(null)
+        setSourceColumnId(null)
     }
 
     return(
         <div
         draggable={true}
         onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
         className="cursor-grab h-10 border border-black rounded-xl 
         flex justify-between items-center pl-1.5 py-2.5 will-change-transform active:cursor-grabbing"
         >   

@@ -10,6 +10,8 @@ interface TaskProviderT {
 
 interface ContextDataT {
     tasks: BoardData
+    activeTaskId: string | null
+    sourceColumnId: columnIdT | null
 }
 
 interface ContextActionsT {
@@ -19,12 +21,18 @@ interface ContextActionsT {
     deleteColumnTask: (columnId: columnIdT) => void
     deleteAllTask: () => void
     setTasks: Dispatch<SetStateAction<BoardData>>
+    setActiveTaskId: Dispatch<SetStateAction<string | null>>
+    setSourceColumnId: Dispatch<SetStateAction<columnIdT | null>>
 }
 
 const ContextData = createContext<ContextDataT | null>(null)
 const ContextActions = createContext<ContextActionsT | null>(null)
 
 export const TaskProvider = ({ children }: TaskProviderT) => {
+
+    const [activeTaskId, setActiveTaskId] = useState<string | null>('')
+    const [sourceColumnId, setSourceColumnId] = useState<columnIdT | null>(null)
+
 
     const keyTask = 'tasks'
     
@@ -117,8 +125,10 @@ export const TaskProvider = ({ children }: TaskProviderT) => {
     }, [])
 
     const dataValue = useMemo(() => ({
-        tasks
-    }), [tasks])
+        tasks,
+        activeTaskId,
+        sourceColumnId
+    }), [tasks, activeTaskId, sourceColumnId])
 
     const actionsValue = useMemo(() => ({
         addTask,
@@ -126,8 +136,10 @@ export const TaskProvider = ({ children }: TaskProviderT) => {
         deleteTask,
         deleteColumnTask,
         deleteAllTask, 
-        setTasks
-    }), [addTask, renameTask, deleteTask, deleteColumnTask, deleteAllTask, setTasks])
+        setTasks,
+        setActiveTaskId,
+        setSourceColumnId,
+    }), [addTask, renameTask, deleteTask, deleteColumnTask, deleteAllTask, setTasks, setActiveTaskId, setSourceColumnId])
 
     if (!isMounted) {
         return null 
